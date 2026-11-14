@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>TikTok Sign-in</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<main>
+  <h1 id="h">TikTok sign-in</h1>
+  <p id="msg" class="muted">Reading the response…</p>
+  <div class="card" id="box" hidden>
+    <p>Copy this link and paste it into the GTA6 Cuts terminal window:</p>
+    <textarea id="out" readonly></textarea>
+    <button id="copy" type="button">Copy</button>
+  </div>
+  <nav><a href="/">Home</a><a href="/privacy/">Privacy Policy</a><a href="/terms/">Terms of Service</a></nav>
+</main>
+<script>
+  // The authorization code stays in this browser tab; nothing is sent anywhere.
+  var q = new URLSearchParams(location.search);
+  var msg = document.getElementById('msg');
+  if (q.get('code')) {
+    msg.textContent = 'Access granted. The code is valid for a few minutes.';
+    document.getElementById('box').hidden = false;
+    document.getElementById('out').value = location.href;
+  } else if (q.get('error')) {
+    document.getElementById('h').textContent = 'Sign-in cancelled';
+    msg.textContent = (q.get('error_description') || q.get('error')) + '. Run the sign-in command again.';
+  } else {
+    msg.textContent = 'This page receives the TikTok sign-in response. Open it through the GTA6 Cuts sign-in command.';
+  }
+  document.getElementById('copy').onclick = function () {
+    var t = document.getElementById('out');
+    t.select();
+    try { navigator.clipboard.writeText(t.value); } catch (e) { document.execCommand('copy'); }
+    this.textContent = 'Copied';
+  };
+</script>
+</body>
+</html>
